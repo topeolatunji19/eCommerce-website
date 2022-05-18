@@ -1,0 +1,48 @@
+{% include "header.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block content %}
+  <!-- Post Content -->
+    {% set final_price = namespace(value=0) %}
+    <div class="container show-cart-page">
+        {% if not items: %}
+            <div class="empty-cart-page">
+                <h1 class="empty-cart">Your Cart is Empty</h1>
+            </div>
+        {% else: %}
+            {% for item in items %}
+            <div class="cart-page-item">
+                <img class="cart-img" src={{item.cart_item.img_url}} width="250" height="250">
+                <div class="cart-details">
+                    <h3>{{ item.cart_item.name }}</h3>
+                    <h5>Unit Price: ${{ item.cart_item.price }}</h5>
+                    <br>
+
+                    <form action="{{ url_for('edit_cart', item_id=item.id)}}" method="post">
+                    <h5>X <input class="form-group input-small" type="number" min="1" max="{{ item.cart_item.quantity }}" name="quantity" size="10" value="{{item.quantity}}"></h5>
+                    <button type="submit" class="btn btn-dark">Edit Quantity</button>
+                    </form>
+
+                    <br>
+                    {% set unit_price = item.cart_item.price %}
+                    {% set quantity = item.quantity %}
+                    {% set sub_total = unit_price * quantity %}
+                    <h5>Total = ${{ unit_price * quantity }}</h5>
+                    {% set final_price.value = final_price.value + sub_total %}
+                    <h6><a class="remove-item" href="{{url_for('remove_item', item_id=item.id) }}">Remove Item</a></h6>
+                    <hr>
+                </div>
+            </div>
+            {% endfor %}
+            <div class="text-right">
+                <h4>Total: ${{ final_price.value }}</h4>
+                <br>
+                <a href="{{ url_for('create_checkout_session',user_id=current_user.id) }}"><button type="button" class="btn btn-dark btn-lg">Proceed to Checkout</button></a>
+                <br>
+            </div>
+        {% endif %}
+    </div>
+
+
+{% include "footer.html" %}
+{% endblock %}

@@ -1,0 +1,31 @@
+{% include "header.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block content %}
+  <!-- Post Content -->
+    <div class="container show-item">
+        <div class="catalog-item">
+            <img class="item-img" src={{item.img_url}} width="45%" height="70%">
+            <div class="description">
+                <h3>{{ item.name }}</h3>
+                <h5>${{ item.price }}</h5>
+
+                <form action="" method="post">
+                {{ form.csrf_token() }}
+                {{ form.quantity(class_='input-small', value="1", min="1", max=item.quantity) }}
+                <br>
+                <br>
+                <button type="submit" class="btn btn-dark">Add to Cart</button>
+                </form>
+                <br>
+                <p>Sold by: <a href="#">{{item.seller.name}}</a></p>
+                <hr>
+                <p>Description: {{ item.description }}</p>
+                <p>Quantity left: {{ item.quantity }}</p>
+            </div>
+        </div>
+    </div>
+
+
+{% include "footer.html" %}
+{% endblock %}

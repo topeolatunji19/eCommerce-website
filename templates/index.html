@@ -1,0 +1,28 @@
+{% extends 'bootstrap/base.html' %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block content %}
+{% include "header.html" %}
+
+
+<div class="container all-items" style="width: 100%;">
+    <div class="row">
+    {% for item in all_items %}
+      <div class="col-lg-2 col-md-3 col-sm-6 col-xs-6 card-item">
+          <div class="card" style="width: 18rem; height: 330px;">
+              <img class="card-img-top" src="{{item.img_url}}" alt="Card image cap">
+              <div class="card-body d-flex flex-column">
+                <h3 class="card-text">{{ item.name }}</h3>
+                <h4 class="card-text">${{ item.price }}</h4>
+                <h5 class="card-text">{{ item.description }}</h5>
+                <a style="align-items: end;" class="btn btn-primary mt-auto" href="{{ url_for('add_to_cart', item_id=item.id)}}" role="button">Add to Cart</a>
+                <a style="align-items: end; margin-top: 5px;" class="btn btn-dark" href="{{ url_for('show_item', item_id=item.id)}}" role="button">View Item</a>
+              </div>
+            </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+{% include "footer.html" %}
+{% endblock %}
